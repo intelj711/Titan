@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,8 +33,13 @@ public class RecommendItem extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
+		// allow access only if session exists
+		HttpSession session = request.getSession();
+		if (session.getAttribute("user") == null) {
+			response.setStatus(403);
+			return;
+		}
+
 		response.setContentType("application/json");
 		response.addHeader("Access-Control-Allow-Origin", "*");
 
@@ -53,7 +59,13 @@ public class RecommendItem extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// allow access only if session exists
+		HttpSession session = request.getSession();
+		if (session.getAttribute("user") == null) {
+			response.setStatus(403);
+			return;
+		}
+				
 		doGet(request, response);
 	}
 
