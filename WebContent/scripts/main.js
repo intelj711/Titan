@@ -368,10 +368,7 @@
 		showLoadingMessage('Loading recommended items...');
 
 		// make AJAX call
-		ajax(
-				'GET',
-				url + '?' + params,
-				req,
+		ajax( 'GET', url + '?' + params, req,
 				// successful callback
 				function(res) {
 					var items = JSON.parse(res);
