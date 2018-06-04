@@ -1,1 +1,8 @@
+/.classpath
+/.project
+/algorithm/
+/db/
+/entity/
+/external/
 /offline/
+/rpc/

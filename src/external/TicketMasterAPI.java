@@ -47,21 +47,40 @@ public class TicketMasterAPI implements ExternalAPI {
 
 	@Override
 	public List<Item> search(double lat, double lon, String term) {
+		// create a base url, based on API_HOST and SEARCH_PATH
 		String url = "http://" + API_HOST + SEARCH_PATH;
+		//String geoHash = GeoHash.encodeGeohash(lat, lon, 4);  
 		String latlong = lat + "," + lon;
 		if (term == null) {
 			term = DEFAULT_TERM;
 		}
+		// Encode term in url since it may contain special characters
 		term = urlEncodeHelper(term);
+		// Make your url query part like: "apikey=12345&geoPoint=abcd&keyword=music&radius=50"
 		String query = String.format("apikey=%s&latlong=%s&keyword=%s", API_KEY, latlong, term);
 		try {
+			// Open a HTTP connection between your Java application and TicketMaster based on url
+			/* Create a URLConnection instance that represents a connection to the remote object referred 
+			to by the URL. The HttpUrlConnection class allows us to perform basic HTTP requests without the 
+			use of any additional libraries.
+			*/
 			HttpURLConnection connection = (HttpURLConnection) new URL(url + "?" + query).openConnection();
+			// Set requrest method to GET
+			/*Tell what HTTP method to use. GET by default. The HttpUrlConnection class is used for all types
+			of requests: GET, POST, HEAD, OPTIONS, PUT, DELETE, TRACE. 
+			*/
 			connection.setRequestMethod("GET");
 
+			// Send request to TicketMaster and get response, response code could be returned directly
+			// response body is saved in InputStream of connection.
+			/* Get the status code from an HTTP response message. To execute the request we can use the 
+			 * getResponseCode(), connect(), getInputStream() or getOutputStream() methods.
+			 */
 			int responseCode = connection.getResponseCode();
 			System.out.println("\nSending 'GET' request to URL : " + url + "?" + query);
 			System.out.println("Response Code : " + responseCode);
 
+			// Now read response body to get events data
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			StringBuilder response = new StringBuilder();
